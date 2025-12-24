@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,6 +11,9 @@ import AuthProvider, { AuthContext } from "./context/AuthContext";
 import AppDrawer from "./navigation/AppDrawer";
 import LoginScreen from "./screens/LoginScreen";
 import { useContext } from "react";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,6 +22,7 @@ function RootNavigator() {
   const { user } = useContext(AuthContext);
   return user ? <AppDrawer /> : <LoginScreen />;
 }
+
 
 function HomeTabNavigator() {
   return (
@@ -63,13 +66,14 @@ function HomeTabNavigator() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </AuthProvider>
+    </Provider>
   );
 }
-
